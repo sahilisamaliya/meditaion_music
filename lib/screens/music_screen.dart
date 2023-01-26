@@ -1,122 +1,111 @@
-import 'package:audio_session/audio_session.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:meditaion_music/common.dart';
+import 'package:meditaion_music/model/music_model.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/customText.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 
 class MusicScreen extends StatefulWidget {
-  const MusicScreen({Key? key}) : super(key: key);
+  final String? musicUrl;
+  final String? title;
+  final String? image;
+  final List<MusicData>? musicDataList;
+  final int? index;
+
+  const MusicScreen({
+    Key? key,
+    this.musicUrl,
+    this.title,
+    this.image,
+    this.musicDataList,
+    this.index,
+  }) : super(key: key);
 
   @override
   State<MusicScreen> createState() => _MusicScreenState();
 }
 
+Rx<AudioPlayer> player = AudioPlayer().obs;
+
 class _MusicScreenState extends State<MusicScreen>
     with SingleTickerProviderStateMixin {
   static int _nextMediaId = 0;
-  late AudioPlayer _player;
   AnimationController? _controller;
-  bool _isPlaying = true;
-  final _playlist = ConcatenatingAudioSource(children: [
-    ClippingAudioSource(
-      start: const Duration(seconds: 60),
-      end: const Duration(seconds: 90),
-      child: AudioSource.uri(Uri.parse(
-          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")),
-      tag: MediaItem(
-        id: '${_nextMediaId++}',
-        album: "Science Friday",
-        title: "A Salute To Head-Scratching Science (30 seconds)",
-        artUri: Uri.parse(
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg"),
-      ),
-    ),
-    AudioSource.uri(
-      Uri.parse(
-          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
-      tag: MediaItem(
-        id: '${_nextMediaId++}',
-        album: "Science Friday",
-        title: "A Salute To Head-Scratching Science",
-        artUri: Uri.parse(
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg"),
-      ),
-    ),
-    AudioSource.uri(
-      Uri.parse("https://s3.amazonaws.com/scifri-segments/scifri201711241.mp3"),
-      tag: MediaItem(
-        id: '${_nextMediaId++}',
-        album: "Science Friday",
-        title: "From Cat Rheology To Operatic Incompetence",
-        artUri: Uri.parse(
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg"),
-      ),
-    ),
-    AudioSource.uri(
-      Uri.parse("asset:///audio/nature.mp3"),
-      tag: MediaItem(
-        id: '${_nextMediaId++}',
-        album: "Public Domain",
-        title: "Nature Sounds",
-        artUri: Uri.parse(
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg"),
-      ),
-    ),
-  ]);
-  int _addedCount = 0;
+
+  // bool _isPlaying = true;
 
   @override
   void initState() {
-    super.initState();
+    _init();
     _controller = AnimationController(
       vsync: this,
       lowerBound: 0.3,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
     )..repeat();
 
-    _player = AudioPlayer();
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
-    ));
-    _init();
+    super.initState();
   }
 
   Future<void> _init() async {
-    final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.speech());
-    // Listen to errors during playback.
-    _player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
-      print('A stream error occurred: $e');
-    });
     try {
-      await _player.setAudioSource(_playlist);
-      await _player.play();
+      if (widget.musicUrl?.isNotEmpty ?? false) {
+        List<String>? bits = widget.musicUrl?.split("/");
+        String lastWord = bits![bits.length - 2];
+        final _playlist = AudioSource.uri(
+            Uri.parse('https://drive.google.com/uc?export=view&id=$lastWord'),
+            tag: MediaItem(
+              id: '${_nextMediaId++}',
+              title: widget.title ?? '',
+              artUri: Uri.parse(widget.image ??
+                  "https://img.freepik.com/free-vector/organic-flat-people-meditating-illustration_23-2148906556.jpg?w=2000"),
+            ));
+        await player.value.setAudioSource(_playlist);
+      } else {
+        final _playlist = ConcatenatingAudioSource(
+          children: widget.musicDataList!.map(
+            (e) {
+              List<String>? bits = e.musicUrl?.split("/");
+              String lastWord = bits![bits.length - 2];
+              return AudioSource.uri(
+                  Uri.parse(
+                      'https://drive.google.com/uc?export=view&id=$lastWord'),
+                  tag: MediaItem(
+                    id: '${_nextMediaId++}',
+                    title: e.musicName ?? '',
+                    artUri: Uri.parse(widget.image ??
+                        'https://img.freepik.com/free-vector/organic-flat-people-meditating-illustration_23-2148906556.jpg?w=2000'),
+                  ));
+            },
+          ).toList(),
+        );
+        await player.value.setAudioSource(_playlist, initialIndex: widget.index);
+      }
+
+      await player.value.play();
     } catch (e, stackTrace) {
       // Catch load errors: 404, invalid url ...
       print("Error loading playlist: $e");
-      print(stackTrace);
+      Get.back();
     }
   }
 
   @override
   void dispose() {
-    _player.dispose();
+    _controller?.dispose();
+    // player.dispose();
     super.dispose();
   }
 
   Stream<PositionData> get _positionDataStream =>
       rx.Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-          _player.positionStream,
-          _player.bufferedPositionStream,
-          _player.durationStream,
+          player.value.positionStream,
+          player.value.bufferedPositionStream,
+          player.value.durationStream,
           (position, bufferedPosition, duration) => PositionData(
               position, bufferedPosition, duration ?? Duration.zero));
 
@@ -128,14 +117,15 @@ class _MusicScreenState extends State<MusicScreen>
         height: double.infinity,
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/music_background.png'))),
+                image: AssetImage('assets/images/music_background.png'),
+                fit: BoxFit.cover)),
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.w),
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 30.h),
+                const SizedBox(height: 10),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: InkWell(
@@ -152,54 +142,80 @@ class _MusicScreenState extends State<MusicScreen>
                   ),
                 ),
                 Container(
-                  height: 250,
+                  height: 300,
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
                   child: Stack(
                     alignment: Alignment.center,
                     children: <Widget>[
-                      _buildCircularContainer(200),
                       _buildCircularContainer(250),
                       _buildCircularContainer(300),
-                      const Align(
+                      Align(
                           child: CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/welcome.png"),
-                              radius: 72)),
+                              backgroundImage: CachedNetworkImageProvider(widget
+                                      .image ??
+                                  'https://img.freepik.com/free-vector/organic-flat-people-meditating-illustration_23-2148906556.jpg?w=2000'),
+                              radius: 90)),
                     ],
                   ),
                 ),
-                Center(
-                  child: CustomText(
-                      text: 'Focus Attention',
-                      textAlign: TextAlign.start,
-                      fontWeight: FontWeight.w600,
-                      size: 34.sp,
-                      color: ColorUtils.textColor),
+                StreamBuilder<SequenceState?>(
+                  stream: player.value.sequenceStateStream,
+                  builder: (context, snapshot) {
+                    final state = snapshot.data;
+                    if (state?.sequence.isEmpty ?? true) {
+                      return const SizedBox();
+                    }
+                    final metadata = state!.currentSource!.tag as MediaItem;
+                    return Center(
+                      child: CustomText(
+                          text: metadata.title.replaceAll('_', ' '),
+                          textAlign: TextAlign.center,
+                          fontWeight: FontWeight.w600,
+                          size: 34.sp,
+                          color: ColorUtils.textColor),
+                    );
+                  },
                 ),
                 SizedBox(height: 40.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    StreamBuilder<PositionData>(
+                      stream: _positionDataStream,
+                      builder: (context, snapshot) {
+                        final playerState = snapshot.data;
+                        return InkWell(
+                          onTap: () async {
+                            if (playerState!.position >=
+                                const Duration(seconds: 10)) {
+                              await player.value.seek(Duration(
+                                  seconds: int.parse(playerState
+                                          .position.inSeconds
+                                          .toString()) -
+                                      10));
+                            }
+                          },
+                          child: const Icon(Icons.replay_10_rounded,
+                              size: 56, color: ColorUtils.greyLight),
+                        );
+                      },
+                    ),
                     InkWell(
-                        onTap: () {},
-                        child: const Icon(Icons.replay_10_rounded,
-                            size: 56, color: ColorUtils.greyLight)),
-                    InkWell(
-                      onTap: _player.play,
+                      onTap: player.value.play,
                       child: Container(
-                          height: 100.h,
-                          width: 100.w,
+                          // height: 100.h,
+                          // width: 100.w,
                           padding: const EdgeInsets.all(10),
                           decoration: const BoxDecoration(
                               color: ColorUtils.greyLight,
                               shape: BoxShape.circle),
                           child: StreamBuilder<PlayerState>(
-                            stream: _player.playerStateStream,
+                            stream: player.value.playerStateStream,
                             builder: (context, snapshot) {
                               final playerState = snapshot.data;
                               final processingState =
                                   playerState?.processingState;
                               final playing = playerState?.playing;
-
                               return Container(
                                 height: 70.h,
                                 width: 70.w,
@@ -212,8 +228,7 @@ class _MusicScreenState extends State<MusicScreen>
                                         processingState ==
                                             ProcessingState.buffering
                                     ? const CircularProgressIndicator(
-                                        color: ColorUtils.white,
-                                      )
+                                        color: ColorUtils.white)
                                     : playing != true
                                         ? IconButton(
                                             icon: Icon(Icons.play_arrow_rounded,
@@ -221,9 +236,9 @@ class _MusicScreenState extends State<MusicScreen>
                                                 size: 45.w),
                                             iconSize: 64.0,
                                             onPressed: () {
-                                              _player.play();
+                                              player.value.play();
                                               _controller?.repeat();
-                                              setState(() => _isPlaying = true);
+                                              // setState(() => _isPlaying = true);
                                             },
                                           )
                                         : processingState !=
@@ -234,29 +249,46 @@ class _MusicScreenState extends State<MusicScreen>
                                                     size: 37.w),
                                                 iconSize: 64.0,
                                                 onPressed: () {
-                                                  _player.pause();
+                                                  player.value.pause();
                                                   _controller?.reset();
-                                                  setState(() =>
-                                                      _isPlaying = !_isPlaying);
+                                                  // setState(() =>
+                                                  //     _isPlaying = !_isPlaying);
                                                 },
                                               )
                                             : IconButton(
-                                                icon: const Icon(Icons.replay),
+                                                icon: Icon(Icons.replay_rounded,
+                                                    color: ColorUtils.white,
+                                                    size: 37.w),
                                                 iconSize: 64.0,
-                                                onPressed: () => _player.seek(
+                                                onPressed: () => player.value.seek(
                                                     Duration.zero,
-                                                    index: _player
-                                                        .effectiveIndices!
+                                                    index: player
+                                                        .value.effectiveIndices!
                                                         .first),
                                               ),
                               );
                             },
                           )),
                     ),
-                    InkWell(
-                      onTap: () {},
-                      child: const Icon(Icons.forward_10_rounded,
-                          size: 56, color: ColorUtils.greyLight),
+                    StreamBuilder<PositionData>(
+                      stream: _positionDataStream,
+                      builder: (context, snapshot) {
+                        final playerState = snapshot.data;
+                        return InkWell(
+                          onTap: () async {
+                            if (playerState!.position.inSeconds <=
+                                playerState.duration.inSeconds) {
+                              await player.value.seek(Duration(
+                                  seconds: int.parse(playerState
+                                          .position.inSeconds
+                                          .toString()) +
+                                      10));
+                            }
+                          },
+                          child: const Icon(Icons.forward_10_rounded,
+                              size: 56, color: ColorUtils.greyLight),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -270,7 +302,7 @@ class _MusicScreenState extends State<MusicScreen>
                       bufferedPosition:
                           positionData?.bufferedPosition ?? Duration.zero,
                       onChangeEnd: (newPosition) {
-                        _player.seek(newPosition);
+                        player.value.seek(newPosition);
                       },
                     );
                   },
@@ -292,7 +324,7 @@ class _MusicScreenState extends State<MusicScreen>
           width: _controller!.value * radius,
           height: _controller!.value * radius,
           decoration: BoxDecoration(
-              color: Colors.black54.withOpacity(1 - _controller!.value),
+              color: ColorUtils.textColor.withOpacity(1 - _controller!.value),
               shape: BoxShape.circle),
         );
       },

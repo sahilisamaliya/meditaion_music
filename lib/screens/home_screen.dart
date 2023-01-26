@@ -8,9 +8,14 @@ import 'package:meditaion_music/screens/music_screen.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/customText.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,14 +73,15 @@ class HomeScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 15.h,
                 crossAxisSpacing: 15.w,
-                padding: EdgeInsets.symmetric(vertical: 15.h),
                 shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.symmetric(vertical: 15.h),
                 itemCount: chooseTopicList.length,
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: () => Get.to(const MusicScreen(),
-                        transition: Transition.rightToLeft),
+                    onTap: () {},
+                    // onTap: () => Get.to(const MusicScreen(),
+                    //     transition: Transition.rightToLeft),
                     child: Container(
                       width: 150.w,
                       decoration: BoxDecoration(
@@ -99,7 +105,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   );
                 },
-              ),
+              )
             ],
           ),
         ),

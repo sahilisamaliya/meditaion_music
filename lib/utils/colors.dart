@@ -12,5 +12,6 @@ class ColorUtils {
   static const Color greenColor = Color(0xff6CB28E);
   static const Color skinColor = Color(0xffF1DDCF);
   static const Color greyLight = Color(0xffBABCC6);
+  static const Color dividerColor = Color(0xffADB8D9);
   static const Color blackColor = Colors.black;
 }

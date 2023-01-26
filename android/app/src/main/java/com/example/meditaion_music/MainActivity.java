@@ -1,4 +1,4 @@
-package com.ryanheise.meditaion_music;
+package com.app.meditation_music;
 
 import io.flutter.embedding.android.FlutterActivity;
 

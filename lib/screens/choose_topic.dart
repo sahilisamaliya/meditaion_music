@@ -8,17 +8,6 @@ import 'package:meditaion_music/screens/home_screen.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/customText.dart';
 
-String greeting() {
-  var hour = DateTime.now().hour;
-  if (hour < 12) {
-    return 'Good Morning';
-  }
-  if (hour < 17) {
-    return 'Good Afternoon';
-  }
-  return 'Good Evening';
-}
-
 class ChooseTopic extends StatelessWidget {
   const ChooseTopic({Key? key}) : super(key: key);
 
@@ -39,29 +28,24 @@ class ChooseTopic extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 65.h),
-              CustomText(
-                  text: greeting(),
-                  textAlign: TextAlign.center,
-                  fontWeight: FontWeight.w300,
-                  size: 16.sp,
-                  color: ColorUtils.lightTextColor),
-              RichText(
-                text: TextSpan(
-                  text: 'What Brings you\n',
-                  style: TextStyle(
-                      fontSize: 28.sp,
-                      color: ColorUtils.textColor,
-                      fontWeight: FontWeight.w700),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: 'to Silent Moon?',
-                        style: TextStyle(
-                            fontSize: 28.sp,
-                            color: ColorUtils.textColor,
-                            fontWeight: FontWeight.w300)),
-                  ],
-                ),
-              ),
+              // RichText(
+              //   text: TextSpan(
+              //     text: "${greeting()}\n",
+              //     style: TextStyle(
+              //         fontSize: 28.sp,
+              //         color: ColorUtils.textColor,
+              //         fontWeight: FontWeight.w700),
+              //     children: <TextSpan>[
+              //       TextSpan(
+              //           text: 'We Wish you have a good day',
+              //           style: TextStyle(
+              //               fontSize: 22.sp,
+              //               color: ColorUtils.textColor,
+              //               fontWeight: FontWeight.w300)),
+              //     ],
+              //   ),
+              // ),
+              SizedBox(height: 5.h),
               CustomText(
                   text: 'choose a topic to focuse on:',
                   textAlign: TextAlign.center,
@@ -79,8 +63,12 @@ class ChooseTopic extends StatelessWidget {
                   itemCount: chooseTopicList.length,
                   itemBuilder: (context, index) {
                     return InkWell(
-                      onTap: () => Get.to(const HomeScreen(),
-                          transition: Transition.rightToLeft),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()));
+                      },
                       child: Container(
                         width: 150.w,
                         decoration: BoxDecoration(

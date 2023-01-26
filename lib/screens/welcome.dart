@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:meditaion_music/screens/bottom_bar.dart';
 import 'package:meditaion_music/screens/choose_topic.dart';
+import 'package:meditaion_music/screens/home_screen2.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/customText.dart';
 
@@ -22,15 +24,15 @@ class IntroScreen extends StatelessWidget {
         children: [
           SizedBox(height: 75.h),
           Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.w),
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  text: 'Hi Afsar, Welcome \n ',
+                  text: 'Welcome to Meditation\n ',
                   style: TextStyle(fontSize: 30.sp, color: ColorUtils.white),
                   children: <TextSpan>[
                     TextSpan(
-                        text: 'to Silent Moon',
+                        text: 'Silent Moon',
                         style: TextStyle(
                             fontSize: 30.sp,
                             color: ColorUtils.white,
@@ -57,7 +59,7 @@ class IntroScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: Center(
               child: InkWell(
-                onTap: () => Get.to(const ChooseTopic(),
+                onTap: () => Get.to(() => const BottomBar(),
                     transition: Transition.rightToLeft),
                 child: Container(
                   height: 45.h,

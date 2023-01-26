@@ -71,9 +71,9 @@ class SeekBarState extends State<SeekBar> {
           bottom: -5,
           child: Text(
               RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                  .firstMatch("$_remaining")
+                  .firstMatch("${widget.position}")
                   ?.group(1) ??
-                  '$_remaining',
+                  '${widget.position}',
               style:
               const TextStyle(fontSize: 15, color: ColorUtils.textColor)),
         ),
