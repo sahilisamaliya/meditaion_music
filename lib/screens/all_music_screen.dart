@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:meditaion_music/model/music_model.dart';
 import 'package:meditaion_music/screens/mini_player.dart';
 import 'package:meditaion_music/screens/music_screen.dart';
@@ -21,14 +22,8 @@ class AllMusicScreen extends StatefulWidget {
 
 class _AllMusicScreenState extends State<AllMusicScreen> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // player.stop();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    print("player.value ${player.value.playing}");
     return Scaffold(
       bottomNavigationBar: const MiniPlayer(),
       body: SingleChildScrollView(
@@ -75,12 +70,6 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                       color: ColorUtils.textColor,
                       size: 30.sp,
                       fontWeight: FontWeight.w600),
-                  // const SizedBox(height: 15),
-                  // CustomText(
-                  //     text: "COURSE",
-                  //     color: ColorUtils.lightTextColor,
-                  //     size: 14.sp,
-                  //     fontWeight: FontWeight.w400),
                   const SizedBox(height: 15),
                   CustomText(
                       text:
@@ -104,15 +93,15 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                                   image: widget.recommended?.image,
                                   index: index),
                               transition: Transition.rightToLeft);
-
-                          // id = widget.recommended?.musicData?[index].id;
                         },
                         child: Row(
                           children: [
-                            Obx(() => StreamBuilder<PlayerState>(
-                                  stream: player.value.playerStateStream,
+                            Obx(() => StreamBuilder<SequenceState?>(
+                                  stream: player.value.sequenceStateStream,
                                   builder: (context, snapshot) {
-                                    final playing = snapshot.data?.playing;
+                                    final state = snapshot.data;
+                                    final metadata = state?.currentSource?.tag;
+                                    print("metadata ${metadata}");
                                     return Container(
                                       height: 40.h,
                                       width: 40.w,
@@ -123,13 +112,8 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                                           color: ColorUtils.purpleColor,
                                           shape: BoxShape.circle),
                                       child: Icon(
-                                          playing == true &&
-                                                  player
-                                                          .value
-                                                          .sequenceState
-                                                          ?.currentSource
-                                                          ?.tag
-                                                          .title ==
+                                    player.value.playing == true &&
+                                                  metadata.title ==
                                                       widget
                                                           .recommended
                                                           ?.musicData?[index]

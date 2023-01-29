@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
@@ -178,21 +181,22 @@ class _MusicScreenState extends State<MusicScreen>
                       AppPreference().getInt("ImageId") == null
                           ? CircleAvatar(
                           backgroundImage: CachedNetworkImageProvider(
-                              "${player.value.sequenceState?.currentSource?.tag.artUri}"),
+                              "${widget.image}"),
                           radius: 90)
                           : QueryArtworkWidget(
-                          id: AppPreference().getInt("ImageId") ?? 0,
+                          id: 11351, //AppPreference().getInt("ImageId") ?? 0
                           type: ArtworkType.AUDIO,
                           artworkHeight: 180,
                           artworkWidth: 180,
+                          artworkColor: Colors.white,
                           artworkBorder: BorderRadius.circular(99),
                           nullArtworkWidget: Container(
                             width: 180,
                             height: 180,
                             decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: ColorUtils.purpleColor),
-                            child: const Icon(Icons.music_note),
+                                color: ColorUtils.textColor),
+                            child: const Icon(Icons.music_note,color: Colors.white,size: 60),
                           ))
                     ],
                   ),
@@ -210,7 +214,9 @@ class _MusicScreenState extends State<MusicScreen>
                           text: metadata.title.replaceAll('_', ' '),
                           textAlign: TextAlign.center,
                           fontWeight: FontWeight.w600,
-                          size: 34.sp,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          size: 30,
                           color: ColorUtils.textColor),
                     );
                   },

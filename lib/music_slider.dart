@@ -30,10 +30,7 @@ class SeekBarState extends State<SeekBar> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    _sliderThemeData = SliderTheme.of(context).copyWith(
-      trackHeight: 2.0,
-    );
+    _sliderThemeData = SliderTheme.of(context).copyWith(trackHeight: 2.0);
   }
 
   @override
@@ -71,27 +68,26 @@ class SeekBarState extends State<SeekBar> {
           bottom: -5,
           child: Text(
               RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                  .firstMatch("${widget.position}")
-                  ?.group(1) ??
-                  '${widget.position}',
-              style:
-              const TextStyle(fontSize: 15, color: ColorUtils.textColor)),
-        ),
-        Positioned(
-          left: 16.0,
-          bottom: -5,
-          child: Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
                       .firstMatch("${widget.duration}")
                       ?.group(1) ??
                   '${widget.duration}',
               style:
                   const TextStyle(fontSize: 15, color: ColorUtils.textColor)),
         ),
+        Positioned(
+          left: 16.0,
+          bottom: -5,
+          child: Text(
+              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
+                      .firstMatch("${widget.position}")
+                      ?.group(1) ??
+                  '${widget.position}',
+              style:
+                  const TextStyle(fontSize: 15, color: ColorUtils.textColor)),
+        ),
       ],
     );
   }
-
 }
 
 class HiddenThumbComponentShape extends SliderComponentShape {

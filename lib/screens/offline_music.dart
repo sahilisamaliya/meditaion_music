@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/screens/music_screen.dart';
@@ -70,9 +71,9 @@ class _OfflineMusicState extends State<OfflineMusic> {
                       style: const TextStyle(color: ColorUtils.blackColor),
                     ),
                     // subtitle: Text(
-                    //   item.data![index].displayName,
+                    //   item.data![index].size.toString(),
                     //   style: const TextStyle(
-                    //     color: Colors.white60,
+                    //     color: Colors.red,
                     //   ),
                     // ),
                     leading: QueryArtworkWidget(
@@ -84,11 +85,13 @@ class _OfflineMusicState extends State<OfflineMusic> {
                           decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: ColorUtils.purpleColor),
-                          child: const Icon(Icons.music_note),
+                          child: const Icon(Icons.music_note,
+                              color: ColorUtils.white),
                         )),
                     onTap: () async {
                       await AppPreference()
                           .setInt("ImageId", item.data?[index].id ?? 0);
+                      print("AppPreference ${AppPreference().getInt("ImageId")}");
                       Get.to(() =>
                           MusicScreen(localData: item.data, localIndex: index));
                     },

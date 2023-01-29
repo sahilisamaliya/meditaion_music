@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:meditaion_music/screens/music_screen.dart';
 import 'package:meditaion_music/utils/colors.dart';
+import 'package:meditaion_music/utils/custom_text.dart';
 import 'package:meditaion_music/utils/preferences/preference_manager.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -35,36 +37,59 @@ class _MiniPlayerState extends State<MiniPlayer> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AppPreference().getInt("ImageId") != null
-                          ? QueryArtworkWidget(
-                              id: AppPreference().getInt("ImageId") ?? 0,
-                              type: ArtworkType.AUDIO,
-                              artworkHeight: 70,
-                              artworkWidth: 60,
-                              artworkBorder: BorderRadius.circular(0),
-                              nullArtworkWidget: Container(
-                                width: 60,
-                                height: 70,
-                                decoration: const BoxDecoration(
-                                    color: ColorUtils.purpleColor),
-                                child: const Icon(Icons.music_note,
-                                    color: ColorUtils.white),
-                              ))
-                          : CachedNetworkImage(
-                              imageUrl:
-                                  "${player.value.sequenceState?.currentSource?.tag.artUri}",
-                              fit: BoxFit.cover,
-                              width: 70,
-                              height: 60),
+                      StreamBuilder<SequenceState?>(
+                        stream: player.value.sequenceStateStream,
+                        builder: (context, snapshot) {
+                          final state = snapshot.data;
+                          if (state?.sequence.isEmpty ?? true) {
+                            return const SizedBox();
+                          }
+                          final metadata =
+                              state!.currentSource!.tag as MediaItem;
+                          return AppPreference().getInt("ImageId") != null
+                              ? QueryArtworkWidget(
+                                  id:  11351 ,//AppPreference().getInt("ImageId") ?? 0,
+                                  type: ArtworkType.AUDIO,
+                                  artworkHeight: 70,
+                                  artworkWidth: 60,
+                                  artworkBorder: BorderRadius.circular(0),
+                                  nullArtworkWidget: Container(
+                                    width: 50,
+                                    height: 70,
+                                    margin: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        color: ColorUtils.textColor,borderRadius: BorderRadius.circular(8)),
+                                    child: const Icon(Icons.music_note,
+                                        color: ColorUtils.white),
+                                  ))
+                              : CachedNetworkImage(
+                                  imageUrl:
+                                      "${metadata.artUri}",
+                                  fit: BoxFit.cover,
+                                  width: 70,
+                                  height: 60);
+                        },
+                      ),
                       const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          "${player.value.sequenceState?.currentSource?.tag.title}"
-                              .replaceAll("_", " "),
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 17),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      StreamBuilder<SequenceState?>(
+                        stream: player.value.sequenceStateStream,
+                        builder: (context, snapshot) {
+                          final state = snapshot.data;
+                          if (state?.sequence.isEmpty ?? true) {
+                            return const SizedBox();
+                          }
+                          final metadata =
+                              state!.currentSource!.tag as MediaItem;
+                          return Expanded(
+                            child: CustomText(
+                                text: metadata.title.replaceAll('_', ' '),
+                                textAlign: TextAlign.start,
+                                fontWeight: FontWeight.w600,
+                                overflow: TextOverflow.ellipsis,
+                                size: 17,
+                                color: ColorUtils.white),
+                          );
+                        },
                       ),
                       playing != true
                           ? IconButton(

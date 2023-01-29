@@ -21,8 +21,8 @@ class _BottomBarState extends State<BottomBar> {
   final cnt = Get.put(BottomBarCnt());
   final pages = [
     const HomeScreen(),
-    const Center(child: Text("Coming Soon")),
-    const MeditateScreen(),
+    // const Center(child: Text("Coming Soon")),
+    // const MeditateScreen(),
     const OfflineMusic()
   ];
 
@@ -71,6 +71,68 @@ class _BottomBarState extends State<BottomBar> {
                         ],
                       ),
                     ),
+                    // InkWell(
+                    //   onTap: () => cnt.pageIndex.value = 1,
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Container(
+                    //         height: 46,
+                    //         width: 46,
+                    //         padding: const EdgeInsets.all(11),
+                    //         decoration: BoxDecoration(
+                    //             borderRadius: BorderRadius.circular(18),
+                    //             color: cnt.pageIndex.value == 1
+                    //                 ? ColorUtils.purpleColor
+                    //                 : ColorUtils.white),
+                    //         child: SvgPicture.asset(
+                    //           'assets/images/sleep.svg',
+                    //           color: cnt.pageIndex.value == 1
+                    //               ? ColorUtils.white
+                    //               : ColorUtils.lightTextColor,
+                    //         ),
+                    //       ),
+                    //       CustomText(
+                    //           text: 'Sleep',
+                    //           fontWeight: FontWeight.w400,
+                    //           size: 14.sp,
+                    //           color: cnt.pageIndex.value == 1
+                    //               ? ColorUtils.purpleColor
+                    //               : ColorUtils.lightTextColor)
+                    //     ],
+                    //   ),
+                    // ),
+                    // InkWell(
+                    //   onTap: () => cnt.pageIndex.value = 2,
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Container(
+                    //         height: 46,
+                    //         width: 46,
+                    //         padding: const EdgeInsets.all(11),
+                    //         decoration: BoxDecoration(
+                    //             borderRadius: BorderRadius.circular(18),
+                    //             color: cnt.pageIndex.value == 2
+                    //                 ? ColorUtils.purpleColor
+                    //                 : ColorUtils.white),
+                    //         child: SvgPicture.asset(
+                    //           'assets/images/meditate.svg',
+                    //           color: cnt.pageIndex.value == 2
+                    //               ? ColorUtils.white
+                    //               : ColorUtils.lightTextColor,
+                    //         ),
+                    //       ),
+                    //       CustomText(
+                    //           text: 'Meditate',
+                    //           fontWeight: FontWeight.w400,
+                    //           size: 14.sp,
+                    //           color: cnt.pageIndex.value == 2
+                    //               ? ColorUtils.purpleColor
+                    //               : ColorUtils.lightTextColor)
+                    //     ],
+                    //   ),
+                    // ),
                     InkWell(
                       onTap: () => cnt.pageIndex.value = 1,
                       child: Column(
@@ -86,79 +148,17 @@ class _BottomBarState extends State<BottomBar> {
                                     ? ColorUtils.purpleColor
                                     : ColorUtils.white),
                             child: SvgPicture.asset(
-                              'assets/images/sleep.svg',
+                              'assets/images/music.svg',
                               color: cnt.pageIndex.value == 1
                                   ? ColorUtils.white
                                   : ColorUtils.lightTextColor,
                             ),
                           ),
                           CustomText(
-                              text: 'Sleep',
+                              text: 'Music',
                               fontWeight: FontWeight.w400,
                               size: 14.sp,
                               color: cnt.pageIndex.value == 1
-                                  ? ColorUtils.purpleColor
-                                  : ColorUtils.lightTextColor)
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => cnt.pageIndex.value = 2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 46,
-                            width: 46,
-                            padding: const EdgeInsets.all(11),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(18),
-                                color: cnt.pageIndex.value == 2
-                                    ? ColorUtils.purpleColor
-                                    : ColorUtils.white),
-                            child: SvgPicture.asset(
-                              'assets/images/meditate.svg',
-                              color: cnt.pageIndex.value == 2
-                                  ? ColorUtils.white
-                                  : ColorUtils.lightTextColor,
-                            ),
-                          ),
-                          CustomText(
-                              text: 'Meditate',
-                              fontWeight: FontWeight.w400,
-                              size: 14.sp,
-                              color: cnt.pageIndex.value == 2
-                                  ? ColorUtils.purpleColor
-                                  : ColorUtils.lightTextColor)
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => cnt.pageIndex.value = 3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 46,
-                            width: 46,
-                            padding: const EdgeInsets.all(11),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(18),
-                                color: cnt.pageIndex.value == 3
-                                    ? ColorUtils.purpleColor
-                                    : ColorUtils.white),
-                            child: SvgPicture.asset(
-                              'assets/images/meditate.svg',
-                              color: cnt.pageIndex.value == 3
-                                  ? ColorUtils.white
-                                  : ColorUtils.lightTextColor,
-                            ),
-                          ),
-                          CustomText(
-                              text: 'Meditate',
-                              fontWeight: FontWeight.w400,
-                              size: 14.sp,
-                              color: cnt.pageIndex.value == 3
                                   ? ColorUtils.purpleColor
                                   : ColorUtils.lightTextColor)
                         ],
