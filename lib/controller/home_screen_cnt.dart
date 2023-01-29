@@ -17,8 +17,6 @@ class HomeScreenCnt extends GetxController {
           .get('https://sahilisamaliya.github.io/exam/meditation.json');
 
       // List<dynamic> musicList = response.data['data'];
-
-      print(response.data);
       musicModel = MusicResponseModel.fromJson(response.data);
       musicModel?.recommended?.shuffle();
       // return musicList.map((e) => MusicData.fromJson(e)).toList();

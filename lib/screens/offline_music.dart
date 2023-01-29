@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/screens/music_screen.dart';
@@ -68,7 +67,7 @@ class _OfflineMusicState extends State<OfflineMusic> {
                     textColor: Colors.white,
                     title: Text(
                       item.data![index].title,
-                      style: TextStyle(color: ColorUtils.blackColor),
+                      style: const TextStyle(color: ColorUtils.blackColor),
                     ),
                     // subtitle: Text(
                     //   item.data![index].displayName,

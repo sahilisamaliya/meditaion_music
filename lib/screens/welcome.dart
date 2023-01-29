@@ -3,10 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/screens/bottom_bar.dart';
-import 'package:meditaion_music/screens/choose_topic.dart';
-import 'package:meditaion_music/screens/home_screen.dart';
 import 'package:meditaion_music/utils/colors.dart';
-import 'package:meditaion_music/utils/customText.dart';
+import 'package:meditaion_music/utils/custom_text.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({Key? key}) : super(key: key);

@@ -7,7 +7,7 @@ import 'package:meditaion_music/model/music_model.dart';
 import 'package:meditaion_music/screens/mini_player.dart';
 import 'package:meditaion_music/screens/music_screen.dart';
 import 'package:meditaion_music/utils/colors.dart';
-import 'package:meditaion_music/utils/customText.dart';
+import 'package:meditaion_music/utils/custom_text.dart';
 import 'package:meditaion_music/utils/preferences/preference_manager.dart';
 
 class AllMusicScreen extends StatefulWidget {

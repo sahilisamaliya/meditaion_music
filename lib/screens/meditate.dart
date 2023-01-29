@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:meditaion_music/model/choose_topic_model.dart';
-import 'package:meditaion_music/screens/music_screen.dart';
 import 'package:meditaion_music/utils/colors.dart';
-import 'package:meditaion_music/utils/customText.dart';
+import 'package:meditaion_music/utils/custom_text.dart';
 
 class MeditateScreen extends StatefulWidget {
   const MeditateScreen({Key? key}) : super(key: key);

@@ -18,7 +18,6 @@ class MiniPlayer extends StatefulWidget {
 class _MiniPlayerState extends State<MiniPlayer> {
   @override
   Widget build(BuildContext context) {
-    print("AppPreference ${AppPreference().getInt("ImageId")}");
     return StreamBuilder<PlayerState>(
       stream: player.value.playerStateStream,
       builder: (context, snapshot) {

@@ -7,7 +7,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:meditaion_music/music_slider.dart';
 import 'package:meditaion_music/model/music_model.dart';
 import 'package:meditaion_music/utils/colors.dart';
-import 'package:meditaion_music/utils/customText.dart';
+import 'package:meditaion_music/utils/custom_text.dart';
 import 'package:meditaion_music/utils/preferences/preference_manager.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:rxdart/rxdart.dart' as rx;
@@ -59,13 +59,12 @@ class _MusicScreenState extends State<MusicScreen>
   }
 
   Future<void> _init() async {
-    final _playlist;
+    final AudioSource playlist;
     try {
-      print("widget.musicUrl?.isNotEmpty ${widget.musicUrl?.isNotEmpty}");
       if (widget.musicUrl?.isNotEmpty ?? false) {
         List<String>? bits = widget.musicUrl?.split("/");
         String lastWord = bits![bits.length - 2];
-        _playlist = AudioSource.uri(
+        playlist = AudioSource.uri(
             Uri.parse('https://drive.google.com/uc?export=view&id=$lastWord'),
             tag: MediaItem(
               id: '${_nextMediaId++}',
@@ -73,10 +72,10 @@ class _MusicScreenState extends State<MusicScreen>
               artUri: Uri.parse(widget.image ??
                   "https://media.istockphoto.com/id/1175435360/vector/music-note-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=R7s6RR849L57bv_c7jMIFRW4H87-FjLB8sqZ08mN0OU="),
             ));
-        await player.value.setAudioSource(_playlist);
+        await player.value.setAudioSource(playlist);
       } else {
         if (widget.localData == null) {
-          _playlist = ConcatenatingAudioSource(
+          playlist = ConcatenatingAudioSource(
             children: widget.musicDataList!.map(
               (e) {
                 List<String>? bits = e.musicUrl?.split("/");
@@ -94,15 +93,15 @@ class _MusicScreenState extends State<MusicScreen>
             ).toList(),
           );
           await player.value
-              .setAudioSource(_playlist, initialIndex: widget.index);
+              .setAudioSource(playlist, initialIndex: widget.index);
         } else {
-          _playlist = ConcatenatingAudioSource(
+          playlist = ConcatenatingAudioSource(
             children: widget.localData!.map(
               (e) {
                 return AudioSource.uri(Uri.parse('${e.uri}'),
                     tag: MediaItem(
                       id: '${_nextMediaId++}',
-                      title: e.title ?? '',
+                      title: e.title,
                       artUri: Uri.parse(widget.image ??
                           'https://media.istockphoto.com/id/1175435360/vector/music-note-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=R7s6RR849L57bv_c7jMIFRW4H87-FjLB8sqZ08mN0OU='),
                     ));
@@ -110,11 +109,11 @@ class _MusicScreenState extends State<MusicScreen>
             ).toList(),
           );
           await player.value
-              .setAudioSource(_playlist, initialIndex: widget.localIndex);
+              .setAudioSource(playlist, initialIndex: widget.localIndex);
         }
       }
       await player.value.play();
-    } catch (e, stackTrace) {
+    } catch (e) {
       // Catch load errors: 404, invalid url ...
       print("Error loading playlist: $e");
       Get.back();
@@ -138,8 +137,6 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
-    // print("AppPreference ${widget.image}");
-    print(player.value.sequenceState?.currentSource?.tag.artUri);
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -170,43 +167,35 @@ class _MusicScreenState extends State<MusicScreen>
                     ),
                   ),
                 ),
-                StreamBuilder<PlayerState>(
-                  stream: player.value.playerStateStream,
-                  builder: (context, snapshot) {
-                    final playerState = snapshot.data;
-                    final processingState = playerState?.processingState;
-                    final playing = playerState?.playing;
-                    return Container(
-                      height: 300,
-                      decoration: const BoxDecoration(shape: BoxShape.circle),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: <Widget>[
-                          _buildCircularContainer(250),
-                          _buildCircularContainer(300),
-                          AppPreference().getInt("ImageId") == null
-                              ? CircleAvatar(
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      "${player.value.sequenceState?.currentSource?.tag.artUri}"),
-                                  radius: 90)
-                              : QueryArtworkWidget(
-                                  id: AppPreference().getInt("ImageId") ?? 0,
-                                  type: ArtworkType.AUDIO,
-                                  artworkHeight: 180,
-                                  artworkWidth: 180,
-                                  artworkBorder: BorderRadius.circular(99),
-                                  nullArtworkWidget: Container(
-                                    width: 180,
-                                    height: 180,
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: ColorUtils.purpleColor),
-                                    child: const Icon(Icons.music_note),
-                                  ))
-                        ],
-                      ),
-                    );
-                  },
+                Container(
+                  height: 300,
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      _buildCircularContainer(250),
+                      _buildCircularContainer(300),
+                      AppPreference().getInt("ImageId") == null
+                          ? CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(
+                              "${player.value.sequenceState?.currentSource?.tag.artUri}"),
+                          radius: 90)
+                          : QueryArtworkWidget(
+                          id: AppPreference().getInt("ImageId") ?? 0,
+                          type: ArtworkType.AUDIO,
+                          artworkHeight: 180,
+                          artworkWidth: 180,
+                          artworkBorder: BorderRadius.circular(99),
+                          nullArtworkWidget: Container(
+                            width: 180,
+                            height: 180,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: ColorUtils.purpleColor),
+                            child: const Icon(Icons.music_note),
+                          ))
+                    ],
+                  ),
                 ),
                 StreamBuilder<SequenceState?>(
                   stream: player.value.sequenceStateStream,

@@ -25,7 +25,7 @@ class SeekBar extends StatefulWidget {
 
 class SeekBarState extends State<SeekBar> {
   double? _dragValue;
-  late SliderThemeData _sliderThemeData;
+  SliderThemeData? _sliderThemeData;
 
   @override
   void didChangeDependencies() {
@@ -92,7 +92,6 @@ class SeekBarState extends State<SeekBar> {
     );
   }
 
-  Duration get _remaining => widget.duration - widget.position;
 }
 
 class HiddenThumbComponentShape extends SliderComponentShape {
