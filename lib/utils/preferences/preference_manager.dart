@@ -19,6 +19,14 @@ class AppPreference {
     await _preferences.setString(key, value);
   }
 
+  Future setInt(String key, int value) async {
+    await _preferences.setInt(key, value);
+  }
+
+  int? getInt(String key) {
+    return _preferences.getInt(key);
+  }
+
   String getString(String key, {String defValue = ''}) {
     return _preferences.getString(key) != null
         ? (_preferences.getString(key) ?? '')

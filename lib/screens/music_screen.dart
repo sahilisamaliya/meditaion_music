@@ -4,10 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:meditaion_music/common.dart';
+import 'package:meditaion_music/music_slider.dart';
 import 'package:meditaion_music/model/music_model.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/customText.dart';
+import 'package:meditaion_music/utils/preferences/preference_manager.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 
 class MusicScreen extends StatefulWidget {
@@ -16,6 +18,9 @@ class MusicScreen extends StatefulWidget {
   final String? image;
   final List<MusicData>? musicDataList;
   final int? index;
+  final bool? isPlaying;
+  final int? localIndex;
+  final List<SongModel>? localData;
 
   const MusicScreen({
     Key? key,
@@ -24,6 +29,9 @@ class MusicScreen extends StatefulWidget {
     this.image,
     this.musicDataList,
     this.index,
+    this.isPlaying = false,
+    this.localIndex,
+    this.localData,
   }) : super(key: key);
 
   @override
@@ -37,55 +45,74 @@ class _MusicScreenState extends State<MusicScreen>
   static int _nextMediaId = 0;
   AnimationController? _controller;
 
-  // bool _isPlaying = true;
-
   @override
   void initState() {
-    _init();
+    if (widget.isPlaying == false) {
+      _init();
+    }
     _controller = AnimationController(
       vsync: this,
       lowerBound: 0.3,
       duration: const Duration(seconds: 3),
     )..repeat();
-
     super.initState();
   }
 
   Future<void> _init() async {
+    final _playlist;
     try {
+      print("widget.musicUrl?.isNotEmpty ${widget.musicUrl?.isNotEmpty}");
       if (widget.musicUrl?.isNotEmpty ?? false) {
         List<String>? bits = widget.musicUrl?.split("/");
         String lastWord = bits![bits.length - 2];
-        final _playlist = AudioSource.uri(
+        _playlist = AudioSource.uri(
             Uri.parse('https://drive.google.com/uc?export=view&id=$lastWord'),
             tag: MediaItem(
               id: '${_nextMediaId++}',
               title: widget.title ?? '',
               artUri: Uri.parse(widget.image ??
-                  "https://img.freepik.com/free-vector/organic-flat-people-meditating-illustration_23-2148906556.jpg?w=2000"),
+                  "https://media.istockphoto.com/id/1175435360/vector/music-note-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=R7s6RR849L57bv_c7jMIFRW4H87-FjLB8sqZ08mN0OU="),
             ));
         await player.value.setAudioSource(_playlist);
       } else {
-        final _playlist = ConcatenatingAudioSource(
-          children: widget.musicDataList!.map(
-            (e) {
-              List<String>? bits = e.musicUrl?.split("/");
-              String lastWord = bits![bits.length - 2];
-              return AudioSource.uri(
-                  Uri.parse(
-                      'https://drive.google.com/uc?export=view&id=$lastWord'),
-                  tag: MediaItem(
-                    id: '${_nextMediaId++}',
-                    title: e.musicName ?? '',
-                    artUri: Uri.parse(widget.image ??
-                        'https://img.freepik.com/free-vector/organic-flat-people-meditating-illustration_23-2148906556.jpg?w=2000'),
-                  ));
-            },
-          ).toList(),
-        );
-        await player.value.setAudioSource(_playlist, initialIndex: widget.index);
+        if (widget.localData == null) {
+          _playlist = ConcatenatingAudioSource(
+            children: widget.musicDataList!.map(
+              (e) {
+                List<String>? bits = e.musicUrl?.split("/");
+                String lastWord = bits![bits.length - 2];
+                return AudioSource.uri(
+                    Uri.parse(
+                        'https://drive.google.com/uc?export=view&id=$lastWord'),
+                    tag: MediaItem(
+                      id: '${_nextMediaId++}',
+                      title: e.musicName ?? '',
+                      artUri: Uri.parse(widget.image ??
+                          'https://img.freepik.com/free-vector/organic-flat-people-meditating-illustration_23-2148906556.jpg?w=2000'),
+                    ));
+              },
+            ).toList(),
+          );
+          await player.value
+              .setAudioSource(_playlist, initialIndex: widget.index);
+        } else {
+          _playlist = ConcatenatingAudioSource(
+            children: widget.localData!.map(
+              (e) {
+                return AudioSource.uri(Uri.parse('${e.uri}'),
+                    tag: MediaItem(
+                      id: '${_nextMediaId++}',
+                      title: e.title ?? '',
+                      artUri: Uri.parse(widget.image ??
+                          'https://media.istockphoto.com/id/1175435360/vector/music-note-icon-vector-illustration.jpg?s=612x612&w=0&k=20&c=R7s6RR849L57bv_c7jMIFRW4H87-FjLB8sqZ08mN0OU='),
+                    ));
+              },
+            ).toList(),
+          );
+          await player.value
+              .setAudioSource(_playlist, initialIndex: widget.localIndex);
+        }
       }
-
       await player.value.play();
     } catch (e, stackTrace) {
       // Catch load errors: 404, invalid url ...
@@ -111,6 +138,8 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
+    // print("AppPreference ${widget.image}");
+    print(player.value.sequenceState?.currentSource?.tag.artUri);
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -141,22 +170,43 @@ class _MusicScreenState extends State<MusicScreen>
                     ),
                   ),
                 ),
-                Container(
-                  height: 300,
-                  decoration: const BoxDecoration(shape: BoxShape.circle),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      _buildCircularContainer(250),
-                      _buildCircularContainer(300),
-                      Align(
-                          child: CircleAvatar(
-                              backgroundImage: CachedNetworkImageProvider(widget
-                                      .image ??
-                                  'https://img.freepik.com/free-vector/organic-flat-people-meditating-illustration_23-2148906556.jpg?w=2000'),
-                              radius: 90)),
-                    ],
-                  ),
+                StreamBuilder<PlayerState>(
+                  stream: player.value.playerStateStream,
+                  builder: (context, snapshot) {
+                    final playerState = snapshot.data;
+                    final processingState = playerState?.processingState;
+                    final playing = playerState?.playing;
+                    return Container(
+                      height: 300,
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          _buildCircularContainer(250),
+                          _buildCircularContainer(300),
+                          AppPreference().getInt("ImageId") == null
+                              ? CircleAvatar(
+                                  backgroundImage: CachedNetworkImageProvider(
+                                      "${player.value.sequenceState?.currentSource?.tag.artUri}"),
+                                  radius: 90)
+                              : QueryArtworkWidget(
+                                  id: AppPreference().getInt("ImageId") ?? 0,
+                                  type: ArtworkType.AUDIO,
+                                  artworkHeight: 180,
+                                  artworkWidth: 180,
+                                  artworkBorder: BorderRadius.circular(99),
+                                  nullArtworkWidget: Container(
+                                    width: 180,
+                                    height: 180,
+                                    decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: ColorUtils.purpleColor),
+                                    child: const Icon(Icons.music_note),
+                                  ))
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 StreamBuilder<SequenceState?>(
                   stream: player.value.sequenceStateStream,
@@ -260,11 +310,12 @@ class _MusicScreenState extends State<MusicScreen>
                                                     color: ColorUtils.white,
                                                     size: 37.w),
                                                 iconSize: 64.0,
-                                                onPressed: () => player.value.seek(
-                                                    Duration.zero,
-                                                    index: player
-                                                        .value.effectiveIndices!
-                                                        .first),
+                                                onPressed: () => player.value
+                                                    .seek(Duration.zero,
+                                                        index: player
+                                                            .value
+                                                            .effectiveIndices!
+                                                            .first),
                                               ),
                               );
                             },

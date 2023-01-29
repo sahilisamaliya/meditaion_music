@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:meditaion_music/model/music_model.dart';
+import 'package:meditaion_music/screens/mini_player.dart';
 import 'package:meditaion_music/screens/music_screen.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/customText.dart';
+import 'package:meditaion_music/utils/preferences/preference_manager.dart';
 
 class AllMusicScreen extends StatefulWidget {
   final Recommended? recommended;
@@ -28,6 +30,7 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: const MiniPlayer(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -93,7 +96,8 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: () {
+                        onTap: () async {
+                          await AppPreference().clearSharedPreferences();
                           Get.to(
                               () => MusicScreen(
                                   musicDataList: widget.recommended?.musicData,
@@ -119,7 +123,17 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                                           color: ColorUtils.purpleColor,
                                           shape: BoxShape.circle),
                                       child: Icon(
-                                          playing == true && player.value.sequenceState?.currentSource?.tag.title == widget.recommended?.musicData?[index].musicName
+                                          playing == true &&
+                                                  player
+                                                          .value
+                                                          .sequenceState
+                                                          ?.currentSource
+                                                          ?.tag
+                                                          .title ==
+                                                      widget
+                                                          .recommended
+                                                          ?.musicData?[index]
+                                                          .musicName
                                               ? Icons.pause_rounded
                                               : Icons.play_arrow_rounded,
                                           color: ColorUtils.white,

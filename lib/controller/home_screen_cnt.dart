@@ -20,7 +20,7 @@ class HomeScreenCnt extends GetxController {
 
       print(response.data);
       musicModel = MusicResponseModel.fromJson(response.data);
-
+      musicModel?.recommended?.shuffle();
       // return musicList.map((e) => MusicData.fromJson(e)).toList();
       isLoading.value = false;
     } catch (e) {

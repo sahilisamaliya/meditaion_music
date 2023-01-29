@@ -4,7 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/model/choose_topic_model.dart';
-import 'package:meditaion_music/screens/home_screen.dart';
+import 'package:meditaion_music/screens/meditate.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/customText.dart';
 
@@ -67,7 +67,7 @@ class ChooseTopic extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
+                                builder: (context) => MeditateScreen()));
                       },
                       child: Container(
                         width: 150.w,
