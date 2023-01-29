@@ -178,26 +178,35 @@ class _MusicScreenState extends State<MusicScreen>
                     children: <Widget>[
                       _buildCircularContainer(250),
                       _buildCircularContainer(300),
-                      AppPreference().getInt("ImageId") == null
-                          ? CircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider(
-                              "${widget.image}"),
-                          radius: 90)
-                          : QueryArtworkWidget(
-                          id: 11351, //AppPreference().getInt("ImageId") ?? 0
-                          type: ArtworkType.AUDIO,
-                          artworkHeight: 180,
-                          artworkWidth: 180,
-                          artworkColor: Colors.white,
-                          artworkBorder: BorderRadius.circular(99),
-                          nullArtworkWidget: Container(
-                            width: 180,
-                            height: 180,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: ColorUtils.textColor),
-                            child: const Icon(Icons.music_note,color: Colors.white,size: 60),
-                          ))
+                      StreamBuilder<SequenceState?>(
+                        stream: player.value.sequenceStateStream,
+                        builder: (context, snapshot) {
+                          final state = snapshot.data;
+                          final metadata = state?.currentSource?.tag;
+                          return AppPreference().getInt("ImageId") == null
+                              ? CircleAvatar(
+                                  backgroundImage: CachedNetworkImageProvider(
+                                      "${metadata.artUri}"),
+                                  radius: 90)
+                              : QueryArtworkWidget(
+                                  id: 11351,
+                                  //AppPreference().getInt("ImageId") ?? 0
+                                  type: ArtworkType.AUDIO,
+                                  artworkHeight: 180,
+                                  artworkWidth: 180,
+                                  artworkColor: Colors.white,
+                                  artworkBorder: BorderRadius.circular(99),
+                                  nullArtworkWidget: Container(
+                                    width: 180,
+                                    height: 180,
+                                    decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: ColorUtils.textColor),
+                                    child: const Icon(Icons.music_note,
+                                        color: Colors.white, size: 60),
+                                  ));
+                        },
+                      )
                     ],
                   ),
                 ),

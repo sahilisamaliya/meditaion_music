@@ -23,7 +23,7 @@ class AllMusicScreen extends StatefulWidget {
 class _AllMusicScreenState extends State<AllMusicScreen> {
   @override
   Widget build(BuildContext context) {
-    print("player.value ${player.value.playing}");
+    print("player.value ${player.value.sequenceState?.currentSource?.tag}");
     return Scaffold(
       bottomNavigationBar: const MiniPlayer(),
       body: SingleChildScrollView(
@@ -96,23 +96,26 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                         },
                         child: Row(
                           children: [
-                            Obx(() => StreamBuilder<SequenceState?>(
-                                  stream: player.value.sequenceStateStream,
-                                  builder: (context, snapshot) {
-                                    final state = snapshot.data;
-                                    final metadata = state?.currentSource?.tag;
-                                    print("metadata ${metadata}");
-                                    return Container(
-                                      height: 40.h,
-                                      width: 40.w,
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      alignment: Alignment.center,
-                                      decoration: const BoxDecoration(
-                                          color: ColorUtils.purpleColor,
-                                          shape: BoxShape.circle),
-                                      child: Icon(
-                                    player.value.playing == true &&
+                            StreamBuilder<SequenceState?>(
+                              stream: player.value.sequenceStateStream,
+                              builder: (context, snapshot) {
+                                final state = snapshot.data;
+                                final metadata = state?.currentSource?.tag;
+                                return Container(
+                                  height: 40.h,
+                                  width: 40.w,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  alignment: Alignment.center,
+                                  decoration: const BoxDecoration(
+                                      color: ColorUtils.purpleColor,
+                                      shape: BoxShape.circle),
+                                  child: StreamBuilder<PlayerState>(
+                                    stream: player.value.playerStateStream,
+                                    builder: (context, snapshot) {
+                                      final playing = snapshot.data?.playing;
+                                      return Icon(
+                                          playing == true &&
                                                   metadata.title ==
                                                       widget
                                                           .recommended
@@ -121,10 +124,12 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                                               ? Icons.pause_rounded
                                               : Icons.play_arrow_rounded,
                                           color: ColorUtils.white,
-                                          size: 25.w),
-                                    );
-                                  },
-                                )),
+                                          size: 25.w);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
                             const SizedBox(width: 20),
                             Expanded(
                               child: CustomText(
