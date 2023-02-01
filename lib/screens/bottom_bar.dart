@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/controller/bottom_bar_cnt.dart';
-import 'package:meditaion_music/screens/meditate.dart';
 import 'package:meditaion_music/screens/home_screen.dart';
 import 'package:meditaion_music/screens/mini_player.dart';
 import 'package:meditaion_music/screens/offline_music.dart';

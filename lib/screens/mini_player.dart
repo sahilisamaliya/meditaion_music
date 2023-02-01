@@ -48,7 +48,8 @@ class _MiniPlayerState extends State<MiniPlayer> {
                               state!.currentSource!.tag as MediaItem;
                           return AppPreference().getInt("ImageId") != null
                               ? QueryArtworkWidget(
-                                  id:  11351 ,//AppPreference().getInt("ImageId") ?? 0,
+                                  id: 11351,
+                                  //AppPreference().getInt("ImageId") ?? 0,
                                   type: ArtworkType.AUDIO,
                                   artworkHeight: 70,
                                   artworkWidth: 60,
@@ -56,18 +57,24 @@ class _MiniPlayerState extends State<MiniPlayer> {
                                   nullArtworkWidget: Container(
                                     width: 50,
                                     height: 70,
-                                    margin: EdgeInsets.all(8),
+                                    margin: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                        color: ColorUtils.textColor,borderRadius: BorderRadius.circular(8)),
+                                        color: ColorUtils.textColor,
+                                        borderRadius: BorderRadius.circular(8)),
                                     child: const Icon(Icons.music_note,
                                         color: ColorUtils.white),
                                   ))
-                              : CachedNetworkImage(
-                                  imageUrl:
-                                      "${metadata.artUri}",
-                                  fit: BoxFit.cover,
-                                  width: 70,
-                                  height: 60);
+                              : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: CachedNetworkImage(
+                                        imageUrl: "${metadata.artUri}",
+                                        fit: BoxFit.cover,
+                                        width: 50,
+                                        height: 70),
+                                  ),
+                              );
                         },
                       ),
                       const SizedBox(width: 10),

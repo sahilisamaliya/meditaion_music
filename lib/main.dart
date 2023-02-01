@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:meditaion_music/screens/bottom_bar.dart';
 import 'package:meditaion_music/screens/welcome.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/preferences/preference_manager.dart';
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               fontFamily: 'Kanit', scaffoldBackgroundColor: ColorUtils.white),
           title: 'First Method',
-          home: const IntroScreen(),
+          home:
+              AppPreference().getBool("welcome") ? const BottomBar() : const IntroScreen(),
         );
       },
     );

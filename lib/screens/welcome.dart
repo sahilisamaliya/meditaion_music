@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:meditaion_music/screens/bottom_bar.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/custom_text.dart';
+import 'package:meditaion_music/utils/preferences/preference_manager.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({Key? key}) : super(key: key);
@@ -57,8 +58,11 @@ class IntroScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: Center(
               child: InkWell(
-                onTap: () => Get.to(() => const BottomBar(),
-                    transition: Transition.rightToLeft),
+                onTap: () async {
+                  await AppPreference().setBool("welcome", true);
+                  Get.to(() => const BottomBar(),
+                      transition: Transition.rightToLeft);
+                },
                 child: Container(
                   height: 45.h,
                   decoration: BoxDecoration(
