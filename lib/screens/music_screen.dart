@@ -40,8 +40,7 @@ class MusicScreen extends StatefulWidget {
 
 Rx<AudioPlayer> player = AudioPlayer().obs;
 
-class _MusicScreenState extends State<MusicScreen>
-    with SingleTickerProviderStateMixin {
+class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStateMixin {
   static int _nextMediaId = 0;
   AnimationController? _controller;
 
