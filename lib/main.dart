@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:meditaion_music/internet_connection/connection_manager_controller.dart';
 import 'package:meditaion_music/screens/bottom_bar.dart';
 import 'package:meditaion_music/screens/welcome.dart';
 import 'package:meditaion_music/utils/colors.dart';
@@ -28,12 +29,11 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
+          initialBinding: ControllerBinding(),
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
               fontFamily: 'Kanit', scaffoldBackgroundColor: ColorUtils.white),
-          title: 'First Method',
-          home:
-              AppPreference().getBool("welcome") ? const BottomBar() : const IntroScreen(),
+          home: AppPreference().getBool("welcome") ? const BottomBar() : const IntroScreen(),
         );
       },
     );

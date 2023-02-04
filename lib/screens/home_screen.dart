@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/controller/home_screen_cnt.dart';
+import 'package:meditaion_music/internet_connection/connection_manager_controller.dart';
+import 'package:meditaion_music/internet_connection/no_internet_screen.dart';
 import 'package:meditaion_music/screens/all_music_screen.dart';
 import 'package:meditaion_music/screens/music_screen.dart';
 import 'package:meditaion_music/utils/colors.dart';
@@ -29,10 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   final controller = Get.put(HomeScreenCnt());
+  final cnt = Get.put(ConnectionManagerController());
 
   @override
   void initState() {
-    controller.getConnectivity();
     controller.getMusicData();
     super.initState();
   }
@@ -43,9 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
           child: Obx(
         () => controller.isLoading.value
-            ? const Center(child: CircularProgressIndicator())
-            : controller.isAlertSet.value
-                ? const Center(child: Text("No Internet"))
+            ? const Center(
+                child: CircularProgressIndicator(color: ColorUtils.purpleColor))
+            : controller.noInternet.value
+                ? const NoInternetScreen()
                 : Container(
                     height: double.infinity,
                     width: double.infinity,
@@ -59,6 +62,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          AnimatedContainer(
+                            height: cnt.connectionType.value ? 40 : 0,
+                            decoration: const BoxDecoration(
+                              color: ColorUtils.textColor,
+                                borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8))),
+                            duration: const Duration(seconds: 1),
+                            child: const Center(
+                              child: CustomText(
+                                  text: 'No Internet',
+                                  textAlign: TextAlign.start,
+                                  fontWeight: FontWeight.w400,
+                                  size: 15,
+                                  color: ColorUtils.white),
+                            ),
+                          ),
                           SizedBox(height: 65.h),
                           RichText(
                             text: TextSpan(

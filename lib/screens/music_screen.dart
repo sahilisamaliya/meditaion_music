@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:meditaion_music/internet_connection/connection_manager_controller.dart';
+import 'package:meditaion_music/internet_connection/no_internet_screen.dart';
 import 'package:meditaion_music/music_slider.dart';
 import 'package:meditaion_music/model/music_model.dart';
 import 'package:meditaion_music/utils/colors.dart';
@@ -40,9 +42,11 @@ class MusicScreen extends StatefulWidget {
 
 Rx<AudioPlayer> player = AudioPlayer().obs;
 
-class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStateMixin {
+class _MusicScreenState extends State<MusicScreen>
+    with SingleTickerProviderStateMixin {
   static int _nextMediaId = 0;
   AnimationController? _controller;
+  final cnt = Get.put(ConnectionManagerController());
 
   @override
   void initState() {
@@ -137,231 +141,250 @@ class _MusicScreenState extends State<MusicScreen> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/images/music_background.png'),
-                fit: BoxFit.cover)),
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.w),
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: InkWell(
-                    onTap: () => Get.back(),
-                    child: Container(
-                      height: 50.h,
-                      width: 50.h,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: ColorUtils.white,
-                      ),
-                      child: const Icon(Icons.close, size: 30),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 300,
-                  decoration: const BoxDecoration(shape: BoxShape.circle),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      _buildCircularContainer(250),
-                      _buildCircularContainer(300),
-                      StreamBuilder<SequenceState?>(
-                        stream: player.value.sequenceStateStream,
-                        builder: (context, snapshot) {
-                          final state = snapshot.data;
-                          final metadata = state?.currentSource?.tag;
-                          return AppPreference().getInt("ImageId") == null
-                              ? CircleAvatar(
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      "${metadata.artUri}"),
-                                  radius: 90)
-                              : QueryArtworkWidget(
-                                  id: 11351,
-                                  //AppPreference().getInt("ImageId") ?? 0
-                                  type: ArtworkType.AUDIO,
-                                  artworkHeight: 180,
-                                  artworkWidth: 180,
-                                  artworkColor: Colors.white,
-                                  artworkBorder: BorderRadius.circular(99),
-                                  nullArtworkWidget: Container(
-                                    width: 180,
-                                    height: 180,
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: ColorUtils.textColor),
-                                    child: const Icon(Icons.music_note,
-                                        color: Colors.white, size: 60),
-                                  ));
-                        },
-                      )
-                    ],
-                  ),
-                ),
-                StreamBuilder<SequenceState?>(
-                  stream: player.value.sequenceStateStream,
-                  builder: (context, snapshot) {
-                    final state = snapshot.data;
-                    if (state?.sequence.isEmpty ?? true) {
-                      return const SizedBox();
-                    }
-                    final metadata = state!.currentSource!.tag as MediaItem;
-                    return Center(
-                      child: CustomText(
-                          text: metadata.title.replaceAll('_', ' '),
-                          textAlign: TextAlign.center,
-                          fontWeight: FontWeight.w600,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          size: 30,
-                          color: ColorUtils.textColor),
-                    );
-                  },
-                ),
-                SizedBox(height: 40.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    StreamBuilder<PositionData>(
-                      stream: _positionDataStream,
-                      builder: (context, snapshot) {
-                        final playerState = snapshot.data;
-                        return InkWell(
-                          onTap: () async {
-                            if (playerState!.position >=
-                                const Duration(seconds: 10)) {
-                              await player.value.seek(Duration(
-                                  seconds: int.parse(playerState
-                                          .position.inSeconds
-                                          .toString()) -
-                                      10));
+      body: Obx(
+        () => cnt.connectionType.value
+            ? const NoInternetScreen()
+            : Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/music_background.png'),
+                        fit: BoxFit.cover)),
+                child: SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.w),
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: InkWell(
+                            onTap: () => Get.back(),
+                            child: Container(
+                              height: 50.h,
+                              width: 50.h,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: ColorUtils.white,
+                              ),
+                              child: const Icon(Icons.close, size: 30),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 300,
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: <Widget>[
+                              _buildCircularContainer(250),
+                              _buildCircularContainer(300),
+                              StreamBuilder<SequenceState?>(
+                                stream: player.value.sequenceStateStream,
+                                builder: (context, snapshot) {
+                                  final state = snapshot.data;
+                                  final metadata = state?.currentSource?.tag;
+                                  return AppPreference().getInt("ImageId") ==
+                                          null
+                                      ? CircleAvatar(
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
+                                                  "${metadata.artUri}"),
+                                          radius: 90)
+                                      : QueryArtworkWidget(
+                                          id: 11351,
+                                          //AppPreference().getInt("ImageId") ?? 0
+                                          type: ArtworkType.AUDIO,
+                                          artworkHeight: 180,
+                                          artworkWidth: 180,
+                                          artworkColor: Colors.white,
+                                          artworkBorder:
+                                              BorderRadius.circular(99),
+                                          nullArtworkWidget: Container(
+                                            width: 180,
+                                            height: 180,
+                                            decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: ColorUtils.textColor),
+                                            child: const Icon(Icons.music_note,
+                                                color: Colors.white, size: 60),
+                                          ));
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                        StreamBuilder<SequenceState?>(
+                          stream: player.value.sequenceStateStream,
+                          builder: (context, snapshot) {
+                            final state = snapshot.data;
+                            if (state?.sequence.isEmpty ?? true) {
+                              return const SizedBox();
                             }
+                            final metadata =
+                                state!.currentSource!.tag as MediaItem;
+                            return Center(
+                              child: CustomText(
+                                  text: metadata.title.replaceAll('_', ' '),
+                                  textAlign: TextAlign.center,
+                                  fontWeight: FontWeight.w600,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  size: 30,
+                                  color: ColorUtils.textColor),
+                            );
                           },
-                          child: const Icon(Icons.replay_10_rounded,
-                              size: 56, color: ColorUtils.greyLight),
-                        );
-                      },
-                    ),
-                    InkWell(
-                      onTap: player.value.play,
-                      child: Container(
-                          // height: 100.h,
-                          // width: 100.w,
-                          padding: const EdgeInsets.all(10),
-                          decoration: const BoxDecoration(
-                              color: ColorUtils.greyLight,
-                              shape: BoxShape.circle),
-                          child: StreamBuilder<PlayerState>(
-                            stream: player.value.playerStateStream,
-                            builder: (context, snapshot) {
-                              final playerState = snapshot.data;
-                              final processingState =
-                                  playerState?.processingState;
-                              final playing = playerState?.playing;
-                              return Container(
-                                height: 70.h,
-                                width: 70.w,
-                                alignment: Alignment.center,
-                                decoration: const BoxDecoration(
-                                    color: ColorUtils.textColor,
-                                    shape: BoxShape.circle),
-                                child: processingState ==
-                                            ProcessingState.loading ||
-                                        processingState ==
-                                            ProcessingState.buffering
-                                    ? const CircularProgressIndicator(
-                                        color: ColorUtils.white)
-                                    : playing != true
-                                        ? IconButton(
-                                            icon: Icon(Icons.play_arrow_rounded,
-                                                color: ColorUtils.white,
-                                                size: 45.w),
-                                            iconSize: 64.0,
-                                            onPressed: () {
-                                              player.value.play();
-                                              _controller?.repeat();
-                                              // setState(() => _isPlaying = true);
-                                            },
-                                          )
-                                        : processingState !=
-                                                ProcessingState.completed
-                                            ? IconButton(
-                                                icon: Icon(Icons.pause_rounded,
-                                                    color: ColorUtils.white,
-                                                    size: 37.w),
-                                                iconSize: 64.0,
-                                                onPressed: () {
-                                                  player.value.pause();
-                                                  _controller?.reset();
-                                                  // setState(() =>
-                                                  //     _isPlaying = !_isPlaying);
-                                                },
-                                              )
-                                            : IconButton(
-                                                icon: Icon(Icons.replay_rounded,
-                                                    color: ColorUtils.white,
-                                                    size: 37.w),
-                                                iconSize: 64.0,
-                                                onPressed: () => player.value
-                                                    .seek(Duration.zero,
-                                                        index: player
+                        ),
+                        SizedBox(height: 40.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            StreamBuilder<PositionData>(
+                              stream: _positionDataStream,
+                              builder: (context, snapshot) {
+                                final playerState = snapshot.data;
+                                return InkWell(
+                                  onTap: () async {
+                                    if (playerState!.position >=
+                                        const Duration(seconds: 10)) {
+                                      await player.value.seek(Duration(
+                                          seconds: int.parse(playerState
+                                                  .position.inSeconds
+                                                  .toString()) -
+                                              10));
+                                    }
+                                  },
+                                  child: const Icon(Icons.replay_10_rounded,
+                                      size: 56, color: ColorUtils.greyLight),
+                                );
+                              },
+                            ),
+                            InkWell(
+                              onTap: player.value.play,
+                              child: Container(
+                                  // height: 100.h,
+                                  // width: 100.w,
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: const BoxDecoration(
+                                      color: ColorUtils.greyLight,
+                                      shape: BoxShape.circle),
+                                  child: StreamBuilder<PlayerState>(
+                                    stream: player.value.playerStateStream,
+                                    builder: (context, snapshot) {
+                                      final playerState = snapshot.data;
+                                      final processingState =
+                                          playerState?.processingState;
+                                      final playing = playerState?.playing;
+                                      return Container(
+                                        height: 70.h,
+                                        width: 70.w,
+                                        alignment: Alignment.center,
+                                        decoration: const BoxDecoration(
+                                            color: ColorUtils.textColor,
+                                            shape: BoxShape.circle),
+                                        child: processingState ==
+                                                    ProcessingState.loading ||
+                                                processingState ==
+                                                    ProcessingState.buffering
+                                            ? const CircularProgressIndicator(
+                                                color: ColorUtils.white)
+                                            : playing != true
+                                                ? IconButton(
+                                                    icon: Icon(
+                                                        Icons
+                                                            .play_arrow_rounded,
+                                                        color: ColorUtils.white,
+                                                        size: 45.w),
+                                                    iconSize: 64.0,
+                                                    onPressed: () {
+                                                      player.value.play();
+                                                      _controller?.repeat();
+                                                      // setState(() => _isPlaying = true);
+                                                    },
+                                                  )
+                                                : processingState !=
+                                                        ProcessingState
+                                                            .completed
+                                                    ? IconButton(
+                                                        icon: Icon(
+                                                            Icons.pause_rounded,
+                                                            color: ColorUtils
+                                                                .white,
+                                                            size: 37.w),
+                                                        iconSize: 64.0,
+                                                        onPressed: () {
+                                                          player.value.pause();
+                                                          _controller?.reset();
+                                                          // setState(() =>
+                                                          //     _isPlaying = !_isPlaying);
+                                                        },
+                                                      )
+                                                    : IconButton(
+                                                        icon: Icon(
+                                                            Icons
+                                                                .replay_rounded,
+                                                            color: ColorUtils
+                                                                .white,
+                                                            size: 37.w),
+                                                        iconSize: 64.0,
+                                                        onPressed: () => player
                                                             .value
-                                                            .effectiveIndices!
-                                                            .first),
-                                              ),
-                              );
-                            },
-                          )),
-                    ),
-                    StreamBuilder<PositionData>(
-                      stream: _positionDataStream,
-                      builder: (context, snapshot) {
-                        final playerState = snapshot.data;
-                        return InkWell(
-                          onTap: () async {
-                            if (playerState!.position.inSeconds <=
-                                playerState.duration.inSeconds) {
-                              await player.value.seek(Duration(
-                                  seconds: int.parse(playerState
-                                          .position.inSeconds
-                                          .toString()) +
-                                      10));
-                            }
+                                                            .seek(Duration.zero,
+                                                                index: player
+                                                                    .value
+                                                                    .effectiveIndices!
+                                                                    .first),
+                                                      ),
+                                      );
+                                    },
+                                  )),
+                            ),
+                            StreamBuilder<PositionData>(
+                              stream: _positionDataStream,
+                              builder: (context, snapshot) {
+                                final playerState = snapshot.data;
+                                return InkWell(
+                                  onTap: () async {
+                                    if (playerState!.position.inSeconds <=
+                                        playerState.duration.inSeconds) {
+                                      await player.value.seek(Duration(
+                                          seconds: int.parse(playerState
+                                                  .position.inSeconds
+                                                  .toString()) +
+                                              10));
+                                    }
+                                  },
+                                  child: const Icon(Icons.forward_10_rounded,
+                                      size: 56, color: ColorUtils.greyLight),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        StreamBuilder<PositionData>(
+                          stream: _positionDataStream,
+                          builder: (context, snapshot) {
+                            final positionData = snapshot.data;
+                            return SeekBar(
+                              duration: positionData?.duration ?? Duration.zero,
+                              position: positionData?.position ?? Duration.zero,
+                              bufferedPosition:
+                                  positionData?.bufferedPosition ??
+                                      Duration.zero,
+                              onChangeEnd: (newPosition) {
+                                player.value.seek(newPosition);
+                              },
+                            );
                           },
-                          child: const Icon(Icons.forward_10_rounded,
-                              size: 56, color: ColorUtils.greyLight),
-                        );
-                      },
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-                StreamBuilder<PositionData>(
-                  stream: _positionDataStream,
-                  builder: (context, snapshot) {
-                    final positionData = snapshot.data;
-                    return SeekBar(
-                      duration: positionData?.duration ?? Duration.zero,
-                      position: positionData?.position ?? Duration.zero,
-                      bufferedPosition:
-                          positionData?.bufferedPosition ?? Duration.zero,
-                      onChangeEnd: (newPosition) {
-                        player.value.seek(newPosition);
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
   }
