@@ -36,7 +36,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                     ? const SizedBox.shrink()
                     : InkWell(
                         onTap: () =>
-                            Get.to(() => const MusicScreen(isPlaying: true)),
+                            Get.to(() => MusicScreen(isPlaying: true,connectionCheck: false,)),
                         child: Container(
                           color: ColorUtils.purpleColor,
                           height: 60,

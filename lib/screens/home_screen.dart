@@ -10,6 +10,7 @@ import 'package:meditaion_music/screens/all_music_screen.dart';
 import 'package:meditaion_music/screens/music_screen.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/custom_text.dart';
+import 'package:meditaion_music/utils/preferences/preference_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -62,23 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          AnimatedContainer(
-                            height: cnt.connectionType.value ? 40 : 0,
-                            decoration: const BoxDecoration(
-                              color: ColorUtils.textColor,
-                                borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(8),
-                                    bottomLeft: Radius.circular(8))),
-                            duration: const Duration(seconds: 1),
-                            child: const Center(
-                              child: CustomText(
-                                  text: 'No Internet',
-                                  textAlign: TextAlign.start,
-                                  fontWeight: FontWeight.w400,
-                                  size: 15,
-                                  color: ColorUtils.white),
-                            ),
-                          ),
                           SizedBox(height: 65.h),
                           RichText(
                             text: TextSpan(
@@ -153,17 +137,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 size: 11.sp,
                                                 color: ColorUtils.white),
                                             InkWell(
-                                              onTap: () => Get.to(
-                                                  () => MusicScreen(
-                                                      musicUrl: controller
-                                                          .musicModel
-                                                          ?.basics
-                                                          ?.musicUrl,
-                                                      title: "Basics",
-                                                      image:
-                                                          "https://media.istockphoto.com/id/1313456479/photo/man-and-soul-yoga-lotus-pose-meditation-on-nebula-galaxy-background.jpg?b=1&s=170667a&w=0&k=20&c=p_EQSpHfArCOvibKe7ypoyFZERAiEFHuFx4weXiHd0g="),
-                                                  transition:
-                                                      Transition.rightToLeft),
+                                              onTap: () async {
+                                                await AppPreference()
+                                                    .clearSharedPreferences();
+                                                Get.to(
+                                                    () => MusicScreen(
+                                                        connectionCheck: false,
+                                                        musicUrl: controller
+                                                            .musicModel
+                                                            ?.basics
+                                                            ?.musicUrl,
+                                                        title: "Basics",
+                                                        image:
+                                                            "https://media.istockphoto.com/id/1313456479/photo/man-and-soul-yoga-lotus-pose-meditation-on-nebula-galaxy-background.jpg?b=1&s=170667a&w=0&k=20&c=p_EQSpHfArCOvibKe7ypoyFZERAiEFHuFx4weXiHd0g="),
+                                                    transition:
+                                                        Transition.rightToLeft);
+                                              },
                                               child: Container(
                                                 height: 35,
                                                 width: 70,
@@ -249,17 +238,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 size: 11.sp,
                                                 color: ColorUtils.textColor),
                                             InkWell(
-                                              onTap: () => Get.to(
-                                                  () => MusicScreen(
-                                                      musicUrl: controller
-                                                          .musicModel
-                                                          ?.relaxation
-                                                          ?.musicUrl,
-                                                      title: "Relaxation",
-                                                      image:
-                                                          "https://media.istockphoto.com/id/1313456479/photo/man-and-soul-yoga-lotus-pose-meditation-on-nebula-galaxy-background.jpg?b=1&s=170667a&w=0&k=20&c=p_EQSpHfArCOvibKe7ypoyFZERAiEFHuFx4weXiHd0g="),
-                                                  transition:
-                                                      Transition.rightToLeft),
+                                              onTap: () async {
+                                                await AppPreference()
+                                                    .clearSharedPreferences();
+                                                Get.to(
+                                                    () => MusicScreen(
+                                                        connectionCheck: false,
+                                                        musicUrl: controller
+                                                            .musicModel
+                                                            ?.relaxation
+                                                            ?.musicUrl,
+                                                        title: "Relaxation",
+                                                        image:
+                                                            "https://media.istockphoto.com/id/1313456479/photo/man-and-soul-yoga-lotus-pose-meditation-on-nebula-galaxy-background.jpg?b=1&s=170667a&w=0&k=20&c=p_EQSpHfArCOvibKe7ypoyFZERAiEFHuFx4weXiHd0g="),
+                                                    transition:
+                                                        Transition.rightToLeft);
+                                              },
                                               child: Container(
                                                 height: 35,
                                                 width: 70,
@@ -338,11 +332,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           color: ColorUtils.textColor),
-                                      CustomText(
-                                          text: 'MEDITATION 3-10 MIN',
-                                          fontWeight: FontWeight.w400,
-                                          size: 11.sp,
-                                          color: ColorUtils.lightTextColor),
                                     ],
                                   ),
                                 );

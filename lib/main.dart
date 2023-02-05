@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -9,6 +10,8 @@ import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/preferences/preference_manager.dart';
 
 void main() async {
+  FlutterNativeSplash.preserve(
+      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   WidgetsFlutterBinding.ensureInitialized();
   await AppPreference().initialAppPreference();
   await JustAudioBackground.init(
@@ -16,6 +19,7 @@ void main() async {
       androidNotificationChannelName: 'Audio playback',
       androidNotificationOngoing: true);
   runApp(const MyApp());
+  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
@@ -33,7 +37,9 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
               fontFamily: 'Kanit', scaffoldBackgroundColor: ColorUtils.white),
-          home: AppPreference().getBool("welcome") ? const BottomBar() : const IntroScreen(),
+          home: AppPreference().getBool("welcome")
+              ? const BottomBar()
+              : const IntroScreen(),
         );
       },
     );

@@ -21,6 +21,7 @@ class MusicScreen extends StatefulWidget {
   final List<MusicData>? musicDataList;
   final int? index;
   final bool? isPlaying;
+  final bool connectionCheck;
   final int? localIndex;
   final List<SongModel>? localData;
 
@@ -33,7 +34,7 @@ class MusicScreen extends StatefulWidget {
     this.index,
     this.isPlaying = false,
     this.localIndex,
-    this.localData,
+    this.localData, required this.connectionCheck,
   }) : super(key: key);
 
   @override
@@ -142,7 +143,7 @@ class _MusicScreenState extends State<MusicScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(
-        () => cnt.connectionType.value
+        () => cnt.connectionType.value && widget.connectionCheck == false
             ? const NoInternetScreen()
             : Container(
                 width: double.infinity,

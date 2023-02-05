@@ -25,8 +25,13 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
   final cnt = Get.put(ConnectionManagerController());
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.recommended?.musicData?.shuffle();
+  }
+  @override
   Widget build(BuildContext context) {
-    print("ConnectionUtil.getInstance().hasConnection ${cnt.connectionType}");
     return Scaffold(
       bottomNavigationBar: const MiniPlayer(),
       body: Obx(
@@ -101,7 +106,8 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                                           musicDataList:
                                               widget.recommended?.musicData,
                                           image: widget.recommended?.image,
-                                          index: index),
+                                          index: index,
+                                          connectionCheck: false),
                                       transition: Transition.rightToLeft);
                                 },
                                 child: Row(

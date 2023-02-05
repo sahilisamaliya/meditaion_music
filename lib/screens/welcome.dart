@@ -60,7 +60,7 @@ class IntroScreen extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   await AppPreference().setBool("welcome", true);
-                  Get.to(() => const BottomBar(),
+                  Get.offAll(() => const BottomBar(),
                       transition: Transition.rightToLeft);
                 },
                 child: Container(

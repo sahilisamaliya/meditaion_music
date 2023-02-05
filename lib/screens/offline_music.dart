@@ -91,9 +91,14 @@ class _OfflineMusicState extends State<OfflineMusic> {
                     onTap: () async {
                       await AppPreference()
                           .setInt("ImageId", item.data?[index].id ?? 0);
-                      print("AppPreference ${AppPreference().getInt("ImageId")}");
-                      Get.to(() =>
-                          MusicScreen(localData: item.data, localIndex: index));
+                      print(
+                          "AppPreference ${AppPreference().getInt("ImageId")}");
+                      Get.to(
+                          () => MusicScreen(
+                              localData: item.data,
+                              localIndex: index,
+                              connectionCheck: true),
+                          transition: Transition.rightToLeft);
                     },
                   ),
                 );
