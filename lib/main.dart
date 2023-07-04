@@ -9,6 +9,10 @@ import 'package:meditaion_music/screens/welcome.dart';
 import 'package:meditaion_music/utils/colors.dart';
 import 'package:meditaion_music/utils/preferences/preference_manager.dart';
 
+
+
+
+
 void main() async {
   FlutterNativeSplash.preserve(
       widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
