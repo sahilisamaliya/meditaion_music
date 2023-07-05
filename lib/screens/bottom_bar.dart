@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/controller/bottom_bar_cnt.dart';
@@ -82,7 +81,7 @@ class _BottomBarState extends State<BottomBar> {
                           CustomText(
                               text: 'Home',
                               fontWeight: FontWeight.w400,
-                              size: 14.sp,
+                              size: 14,
                               color: cnt.pageIndex.value == 0
                                   ? ColorUtils.purpleColor
                                   : ColorUtils.lightTextColor)
@@ -113,7 +112,7 @@ class _BottomBarState extends State<BottomBar> {
                     //       CustomText(
                     //           text: 'Sleep',
                     //           fontWeight: FontWeight.w400,
-                    //           size: 14.sp,
+                    //           size: 14,
                     //           color: cnt.pageIndex.value == 1
                     //               ? ColorUtils.purpleColor
                     //               : ColorUtils.lightTextColor)
@@ -144,7 +143,7 @@ class _BottomBarState extends State<BottomBar> {
                     //       CustomText(
                     //           text: 'Meditate',
                     //           fontWeight: FontWeight.w400,
-                    //           size: 14.sp,
+                    //           size: 14,
                     //           color: cnt.pageIndex.value == 2
                     //               ? ColorUtils.purpleColor
                     //               : ColorUtils.lightTextColor)
@@ -175,7 +174,7 @@ class _BottomBarState extends State<BottomBar> {
                           CustomText(
                               text: 'Music',
                               fontWeight: FontWeight.w400,
-                              size: 14.sp,
+                              size: 14,
                               color: cnt.pageIndex.value == 1
                                   ? ColorUtils.purpleColor
                                   : ColorUtils.lightTextColor)

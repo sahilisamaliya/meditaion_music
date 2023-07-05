@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -36,7 +35,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                     ? const SizedBox.shrink()
                     : InkWell(
                         onTap: () =>
-                            Get.to(() => MusicScreen(isPlaying: true,connectionCheck: false,)),
+                            Get.to(() => const MusicScreen(isPlaying: true,connectionCheck: false,)),
                         child: Container(
                           color: ColorUtils.purpleColor,
                           height: 60,
@@ -113,7 +112,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                               playing != true
                                   ? IconButton(
                                       icon: Icon(Icons.play_arrow_rounded,
-                                          color: ColorUtils.white, size: 30.w),
+                                          color: ColorUtils.white, size: 30),
                                       iconSize: 64.0,
                                       onPressed: () {
                                         player.value.play();
@@ -123,7 +122,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                                       ? IconButton(
                                           icon: Icon(Icons.pause_rounded,
                                               color: ColorUtils.white,
-                                              size: 25.w),
+                                              size: 25),
                                           iconSize: 64.0,
                                           onPressed: () {
                                             player.value.pause();
@@ -132,7 +131,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                                       : IconButton(
                                           icon: Icon(Icons.replay_rounded,
                                               color: ColorUtils.white,
-                                              size: 25.w),
+                                              size: 25),
                                           iconSize: 64.0,
                                           onPressed: () => player.value.seek(
                                               Duration.zero,

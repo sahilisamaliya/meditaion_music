@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/controller/home_screen_cnt.dart';
 import 'package:meditaion_music/utils/colors.dart';
@@ -28,16 +27,16 @@ class NoInternetScreen extends StatelessWidget {
                 await cnt.getMusicData();
               },
               child: Container(
-                height: 45.h,
-                width: 200.w,
+                height: 45,
+                width: 200,
                 decoration: BoxDecoration(
                     color: ColorUtils.offWhite,
-                    borderRadius: BorderRadius.circular(99.r)),
+                    borderRadius: BorderRadius.circular(99)),
                 child: Center(
                     child: CustomText(
                         text: 'Retry',
                         fontWeight: FontWeight.w400,
-                        size: 14.sp,
+                        size: 14,
                         color: ColorUtils.blackColor)),
               ),
             ),

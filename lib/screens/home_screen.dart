@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/controller/home_screen_cnt.dart';
@@ -63,19 +62,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 65.h),
+                          SizedBox(height: 65),
                           RichText(
                             text: TextSpan(
                               text: "${greeting()}\n",
                               style: TextStyle(
-                                  fontSize: 28.sp,
+                                  fontSize: 28,
                                   color: ColorUtils.textColor,
                                   fontWeight: FontWeight.w700),
                               children: <TextSpan>[
                                 TextSpan(
                                     text: 'We Wish you have a good day',
                                     style: TextStyle(
-                                        fontSize: 20.sp,
+                                        fontSize: 20,
                                         color: ColorUtils.lightTextColor,
                                         fontWeight: FontWeight.w300)),
                               ],
@@ -107,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             text: 'Basics',
                                             textAlign: TextAlign.start,
                                             fontWeight: FontWeight.w600,
-                                            size: 18.sp,
+                                            size: 18,
                                             color: ColorUtils.white),
                                       ),
                                       const SizedBox(width: 10),
@@ -118,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             text: 'MUSIC',
                                             textAlign: TextAlign.start,
                                             fontWeight: FontWeight.w400,
-                                            size: 11.sp,
+                                            size: 11,
                                             color: ColorUtils.white),
                                       ),
                                       const Spacer(),
@@ -134,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     '${controller.musicModel?.basics?.musicLength} MIN',
                                                 textAlign: TextAlign.start,
                                                 fontWeight: FontWeight.w400,
-                                                size: 11.sp,
+                                                size: 11,
                                                 color: ColorUtils.white),
                                             InkWell(
                                               onTap: () async {
@@ -160,13 +159,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     color: ColorUtils.offWhite,
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            99.r)),
+                                                            99)),
                                                 child: Center(
                                                     child: CustomText(
                                                         text: 'START',
                                                         fontWeight:
                                                             FontWeight.w400,
-                                                        size: 14.sp,
+                                                        size: 14,
                                                         color: ColorUtils
                                                             .blackColor)),
                                               ),
@@ -208,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             text: 'Relaxation',
                                             textAlign: TextAlign.start,
                                             fontWeight: FontWeight.w600,
-                                            size: 18.sp,
+                                            size: 18,
                                             color: ColorUtils.textColor),
                                       ),
                                       const SizedBox(width: 10),
@@ -219,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             text: 'MUSIC',
                                             textAlign: TextAlign.start,
                                             fontWeight: FontWeight.w400,
-                                            size: 11.sp,
+                                            size: 11,
                                             color: ColorUtils.textColor),
                                       ),
                                       const Spacer(),
@@ -235,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     '${controller.musicModel?.relaxation?.musicLength} MIN',
                                                 textAlign: TextAlign.start,
                                                 fontWeight: FontWeight.w400,
-                                                size: 11.sp,
+                                                size: 11,
                                                 color: ColorUtils.textColor),
                                             InkWell(
                                               onTap: () async {
@@ -261,13 +260,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     color: ColorUtils.textColor,
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            99.r)),
+                                                            99)),
                                                 child: Center(
                                                     child: CustomText(
                                                         text: 'START',
                                                         fontWeight:
                                                             FontWeight.w400,
-                                                        size: 14.sp,
+                                                        size: 14,
                                                         color:
                                                             ColorUtils.white)),
                                               ),
@@ -286,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           CustomText(
                               text: 'Recommended for you',
                               fontWeight: FontWeight.w400,
-                              size: 24.sp,
+                              size: 24,
                               color: ColorUtils.textColor),
                           const SizedBox(height: 20),
                           GridView.builder(
@@ -328,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           text:
                                               '${controller.musicModel?.recommended?[index].title}',
                                           fontWeight: FontWeight.w600,
-                                          size: 16.sp,
+                                          size: 16,
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           color: ColorUtils.textColor),

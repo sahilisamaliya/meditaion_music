@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -154,7 +153,7 @@ class _MusicScreenState extends State<MusicScreen>
                         fit: BoxFit.cover)),
                 child: SafeArea(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.w),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -164,8 +163,8 @@ class _MusicScreenState extends State<MusicScreen>
                           child: InkWell(
                             onTap: () => Get.back(),
                             child: Container(
-                              height: 50.h,
-                              width: 50.h,
+                              height: 50,
+                              width: 50,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: ColorUtils.white,
@@ -239,7 +238,7 @@ class _MusicScreenState extends State<MusicScreen>
                             );
                           },
                         ),
-                        SizedBox(height: 40.h),
+                        SizedBox(height: 40),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -266,8 +265,8 @@ class _MusicScreenState extends State<MusicScreen>
                             InkWell(
                               onTap: player.value.play,
                               child: Container(
-                                  // height: 100.h,
-                                  // width: 100.w,
+                                  // height: 100,
+                                  // width: 100,
                                   padding: const EdgeInsets.all(10),
                                   decoration: const BoxDecoration(
                                       color: ColorUtils.greyLight,
@@ -280,8 +279,8 @@ class _MusicScreenState extends State<MusicScreen>
                                           playerState?.processingState;
                                       final playing = playerState?.playing;
                                       return Container(
-                                        height: 70.h,
-                                        width: 70.w,
+                                        height: 70,
+                                        width: 70,
                                         alignment: Alignment.center,
                                         decoration: const BoxDecoration(
                                             color: ColorUtils.textColor,
@@ -298,7 +297,7 @@ class _MusicScreenState extends State<MusicScreen>
                                                         Icons
                                                             .play_arrow_rounded,
                                                         color: ColorUtils.white,
-                                                        size: 45.w),
+                                                        size: 45),
                                                     iconSize: 64.0,
                                                     onPressed: () {
                                                       player.value.play();
@@ -314,7 +313,7 @@ class _MusicScreenState extends State<MusicScreen>
                                                             Icons.pause_rounded,
                                                             color: ColorUtils
                                                                 .white,
-                                                            size: 37.w),
+                                                            size: 37),
                                                         iconSize: 64.0,
                                                         onPressed: () {
                                                           player.value.pause();
@@ -329,7 +328,7 @@ class _MusicScreenState extends State<MusicScreen>
                                                                 .replay_rounded,
                                                             color: ColorUtils
                                                                 .white,
-                                                            size: 37.w),
+                                                            size: 37),
                                                         iconSize: 64.0,
                                                         onPressed: () => player
                                                             .value

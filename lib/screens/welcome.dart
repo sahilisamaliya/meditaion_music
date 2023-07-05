@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:meditaion_music/screens/bottom_bar.dart';
@@ -21,41 +20,41 @@ class IntroScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 75.h),
+          const SizedBox(height: 75),
           Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: RichText(
                 textAlign: TextAlign.center,
-                text: TextSpan(
+                text: const TextSpan(
                   text: 'Welcome to Meditation\n ',
-                  style: TextStyle(fontSize: 30.sp, color: ColorUtils.white),
+                  style: TextStyle(fontSize: 30, color: ColorUtils.white),
                   children: <TextSpan>[
                     TextSpan(
                         text: 'Silent Moon',
                         style: TextStyle(
-                            fontSize: 30.sp,
+                            fontSize: 30,
                             color: ColorUtils.white,
                             fontWeight: FontWeight.w200)),
                   ],
                 ),
               )),
-          SizedBox(height: 15.h),
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
+          const SizedBox(height: 15),
+          const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: CustomText(
                 text:
                     'Explore the app, Find some peace of mind to prepare for meditation.',
                 textAlign: TextAlign.center,
                 fontWeight: FontWeight.w300,
-                size: 16.sp,
+                size: 16,
               )),
           const Spacer(),
           SvgPicture.asset('assets/images/Group.svg',
               alignment: Alignment.bottomCenter),
           Container(
-            height: 150.h,
+            height: 150,
             color: ColorUtils.purpleColor,
-            padding: EdgeInsets.symmetric(horizontal: 40.w),
+            padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Center(
               child: InkWell(
                 onTap: () async {
@@ -64,15 +63,15 @@ class IntroScreen extends StatelessWidget {
                       transition: Transition.rightToLeft);
                 },
                 child: Container(
-                  height: 45.h,
+                  height: 45,
                   decoration: BoxDecoration(
                       color: ColorUtils.offWhite,
-                      borderRadius: BorderRadius.circular(99.r)),
-                  child: Center(
+                      borderRadius: BorderRadius.circular(99)),
+                  child: const Center(
                       child: CustomText(
                           text: 'GET STARTED',
                           fontWeight: FontWeight.w400,
-                          size: 14.sp,
+                          size: 14,
                           color: ColorUtils.blackColor)),
                 ),
               ),

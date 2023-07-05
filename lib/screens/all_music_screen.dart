@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:meditaion_music/internet_connection/connection_manager_controller.dart';
@@ -80,14 +79,14 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                           CustomText(
                               text: "${widget.recommended?.title}",
                               color: ColorUtils.textColor,
-                              size: 30.sp,
+                              size: 30,
                               fontWeight: FontWeight.w600),
                           const SizedBox(height: 15),
                           CustomText(
                               text:
                                   "Ease the mind into a restful night’s sleep  with these deep, amblent tones.",
                               color: ColorUtils.lightTextColor,
-                              size: 14.sp,
+                              size: 14,
                               fontWeight: FontWeight.w300),
                           const SizedBox(height: 15),
                           const Divider(
@@ -119,8 +118,8 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                                         final metadata =
                                             state?.currentSource?.tag;
                                         return Container(
-                                          height: 40.h,
-                                          width: 40.w,
+                                          height: 40,
+                                          width: 40,
                                           margin: const EdgeInsets.symmetric(
                                               vertical: 10),
                                           alignment: Alignment.center,
@@ -145,7 +144,7 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                                                       : Icons
                                                           .play_arrow_rounded,
                                                   color: ColorUtils.white,
-                                                  size: 25.w);
+                                                  size: 25);
                                             },
                                           ),
                                         );
@@ -158,7 +157,7 @@ class _AllMusicScreenState extends State<AllMusicScreen> {
                                               "${widget.recommended?.musicData?[index].musicName}"
                                                   .replaceAll('_', ' '),
                                           color: ColorUtils.textColor,
-                                          size: 16.sp,
+                                          size: 16,
                                           overflow: TextOverflow.visible,
                                           fontWeight: FontWeight.w400),
                                     ),
